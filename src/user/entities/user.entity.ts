@@ -11,18 +11,15 @@ import {
 import { Exclude } from 'class-transformer';
 import * as argon2 from 'argon2';
 
-@Entity('user')
+@Entity({ name: 'users' })
 export class User extends BaseEntity {
-  constructor(data: Partial<User> = {}) {
+  constructor(dto: Partial<User> = {}) {
     super();
-    Object.assign(this, data);
+    Object.assign(this, dto);
   }
 
-  @PrimaryGeneratedColumn('increment')
-  public readonly id!: number;
-
   @PrimaryGeneratedColumn('uuid')
-  public readonly uid!: string;
+  public readonly id!: number;
 
   @Column({ unique: true, type: 'varchar', length: 36 })
   public readonly username!: string;
@@ -37,11 +34,11 @@ export class User extends BaseEntity {
   @Column({ default: false })
   isAdmin!: boolean;
 
-  @CreateDateColumn({ type: 'timestamp' })
-  public readonly createdAt!: Date;
+  @CreateDateColumn({ type: 'timestamp', default: new Date().toUTCString() })
+  public readonly createdAt: Date;
 
-  @UpdateDateColumn({ type: 'timestamp' })
-  public updatedAt!: Date;
+  @UpdateDateColumn({ type: 'timestamp', default: new Date().toUTCString() })
+  public updatedAt: Date;
 
   @BeforeInsert()
   @BeforeUpdate()
